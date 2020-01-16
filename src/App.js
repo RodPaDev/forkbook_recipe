@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import Step1 from "./form/Step1";
+import Step2 from "./form/Step2";
+import Step3 from "./form/Step3";
 
-function App() {
+
+
+function App(props) {
+  const [page, setPage] = useState(3);
+  console.log(props)
+
+  const goForward = e => {
+    e.preventDefault();
+    setPage(page + 1);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1> Create Recipe </h1>
+      {page === 0 && <button onClick={goForward}>Create Recipe</button>}
+      {page === 1 && <Step1 goForward={goForward}/>}
+      {page === 2 && <Step2 goForward={goForward}/>}
+      {page === 3 && <Step3 goForward={goForward}/>}
+
+
     </div>
   );
 }
 
-export default App;
+export default connect(state => state)(App);
