@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import * as dispatchers from "../redux/actions/actionCreators";
 import axios from "axios";
 
 function Step2(props) {
   const [imgUrl, setImgUrl] = useState(false);
-  const { goForward } = props;
+  const { goForward, addImagesToBody } = props;
+
   const onSubmit = e => {
     e.preventDefault();
+    addImagesToBody(imgUrl)
     goForward(e);
   };
 
@@ -18,7 +22,7 @@ function Step2(props) {
       data.append("upload_preset", "recipe_image");
       const imageUrl = await axios .post("https://api.cloudinary.com/v1_1/dr34bum3p/image/upload", data)
       // Then
-      setImgUrl(imageUrl.data.secure_url)
+      setImgUrl([imageUrl.data.secure_url])
     } catch (error) {
       console.log(error)
     }
@@ -42,4 +46,5 @@ function Step2(props) {
   );
 }
 
-export default Step2;
+export default connect(state => state, dispatchers)(Step2);
+

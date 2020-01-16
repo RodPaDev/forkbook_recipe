@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import * as dispatchers from "../redux/actions/actionCreators";
 import DropDown from "../atomic/DropDown";
 
 const getAllIngredientsUrl = "http://localhost:3333/api/ingredient";
 const getAlUnitsUrl = "http://localhost:3333/api/unit";
 
 function Step3(props) {
-  const { goForward } = props;
+  const { goForward, addRecipeIngredientsToBody } = props;
 
   const [inputState, setInputState] = useState({
     unit_id: "",
@@ -15,12 +17,21 @@ function Step3(props) {
     ingredient_name: ""
   });
 
+  const [cleanState, setCleanState] = useState({
+    unit_id: "",
+    quantity: "",
+    ingredient_id: "",
+  });
+
   const [ingredientsArray, setIngredientsArray] = useState([]);
 
   const inputHandler = e => {
     e.preventDefault();
-    setInputState({ ...inputState, [e.target.name]: e.target.value });
+    setCleanState({ ...cleanState, [e.target.name]: e.target.value })
 
+    if(e.target.name === "quantity"){
+      setInputState({ ...inputState, [e.target.name]: e.target.value });
+    }
     if (e.target.name === "unit_id") {
       const unitName = e.target.options[e.target.value].text;
       setInputState({ ...inputState, unit_name: unitName });
@@ -34,12 +45,13 @@ function Step3(props) {
 
   const onSubmit = e => {
     e.preventDefault();
+    addRecipeIngredientsToBody(ingredientsArray)
     goForward(e);
   };
 
   const addIngredient = e => {
     e.preventDefault();
-    setIngredientsArray([...ingredientsArray, inputState]);
+    setIngredientsArray([...ingredientsArray, cleanState]);
   };
 
   return (
@@ -74,4 +86,5 @@ function Step3(props) {
   );
 }
 
-export default Step3;
+export default connect(state => state, dispatchers)(Step3);
+

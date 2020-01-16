@@ -49,3 +49,19 @@ export const addInstructionsToBody = instructions => dispatch => {
   });
 };
 
+export const postRecipe = payload => dispatch => {
+  axios
+    .post("http://localhost:3333/api/recipe", payload, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token")
+      }
+    })
+    .then(res => {
+      dispatch({ type: types.POST_RECIPE_OK, payload: res.data });
+    })
+    .catch(error => {
+      console.dir(error)
+      dispatch({ type: types.POST_RECIPE_FAIL, payload: error });
+    });
+};

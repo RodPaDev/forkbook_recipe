@@ -1,12 +1,19 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import * as dispatchers from "../redux/actions/actionCreators";
 import DropDown from "../atomic/DropDown";
 
 const getAllCategoiresUrl = "http://localhost:3333/api/category";
 const getAllTagsUrl = "http://localhost:3333/api/tag";
 
-
 function Step1(props) {
-  const { goForward } = props;
+
+  const {
+    goForward,
+    addRecipeToBody,
+    addRecipeCategoriesToBody,
+    addRecipeTagsToBody
+  } = props;
 
   const [inputState, setInputState] = useState({
     title: "",
@@ -16,7 +23,7 @@ function Step1(props) {
     budget: "",
     user_id: localStorage.getItem("userID"),
     recipe_categories: "",
-    tags: ""
+    recipe_tags: ""
   });
 
   const inputHandler = e => {
@@ -26,6 +33,20 @@ function Step1(props) {
 
   const onSubmit = e => {
     e.preventDefault();
+
+    // body.recipe
+    const recipe = { ...inputState };
+    delete recipe.tags;
+    delete recipe.recipe_categories;
+    delete recipe.recipe_tags;
+    addRecipeToBody(recipe);
+
+    // body.recipe_categories
+    addRecipeCategoriesToBody([inputState.recipe_categories])
+
+    // body.recipe_tags
+    addRecipeTagsToBody([inputState.recipe_tags])
+    
     goForward(e);
   };
 
@@ -101,4 +122,4 @@ function Step1(props) {
   );
 }
 
-export default Step1;
+export default connect(state => state, dispatchers)(Step1);
