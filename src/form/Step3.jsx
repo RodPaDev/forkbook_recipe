@@ -24,6 +24,8 @@ function Step3(props) {
   });
 
   const [ingredientsArray, setIngredientsArray] = useState([]);
+  const [ingredientsDisplayArray, setIngredientsDisplayArray] = useState([]);
+
 
   const inputHandler = e => {
     e.preventDefault();
@@ -52,6 +54,7 @@ function Step3(props) {
   const addIngredient = e => {
     e.preventDefault();
     setIngredientsArray([...ingredientsArray, cleanState]);
+    setIngredientsDisplayArray([...ingredientsDisplayArray, inputState]);
   };
 
   return (
@@ -75,7 +78,7 @@ function Step3(props) {
 
       <ul>
         {ingredientsArray.length
-          ? ingredientsArray.map((ing, i) => (
+          ? ingredientsDisplayArray.map((ing, i) => (
               <li key={i}>
                 {ing.quantity} {ing.unit_name} of {ing.ingredient_name}
               </li>

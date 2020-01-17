@@ -9,22 +9,14 @@ import Step5 from "./form/Step5";
 
 
 function App(props) {
-  const {
-    postRecipe,
-    recipe,
-    recipe_categories,
-    recipe_tags,
-    images,
-    recipe_ingredients,
-    instructions
-  } = props;
 
   const [page, setPage] = useState(0);
-  console.log(props);
+
   const goForward = e => {
     e.preventDefault();
     setPage(page + 1);
   };
+
   return (
     <div className="App">
       <h1> Create Recipe </h1>
